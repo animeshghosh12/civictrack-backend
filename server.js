@@ -48,7 +48,20 @@ const issueSchema = new mongoose.Schema({
 
 const Issue = mongoose.model('Issue', issueSchema);
 
-// --- UPDATED POST ROUTE ---
+// ---------------------------------------------------------
+// THE API ROUTES (The Doorways)
+// ---------------------------------------------------------
+
+// DOORWAY 0: The Front Door (Health Check)
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: "Welcome to the CivicTrack API!",
+    status: "Engine is running smoothly 🚀",
+    endpoints: ["/api/issues"]
+  });
+});
+
+// DOORWAY 1: UPDATED POST ROUTE
 // Notice the `upload.single('image')` in the middle. This catches the file before saving to the database.
 app.post('/api/issues', upload.single('image'), async (req, res) => {
   try {
@@ -81,7 +94,7 @@ app.post('/api/issues', upload.single('image'), async (req, res) => {
   }
 });
 
-// GET Route (Same as before)
+// DOORWAY 2: GET Route (Same as before)
 app.get('/api/issues', async (req, res) => {
   try {
     const allIssues = await Issue.find().sort({ createdAt: -1 });
@@ -91,7 +104,7 @@ app.get('/api/issues', async (req, res) => {
   }
 });
 
-// PUT Route (Same as before)
+// DOORWAY 3: PUT Route (Same as before)
 app.put('/api/issues/:id', async (req, res) => {
   try {
     const updatedIssue = await Issue.findByIdAndUpdate(req.params.id, req.body, { new: true });
